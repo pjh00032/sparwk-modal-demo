@@ -80,3 +80,9 @@
         opacity: 1;
     }
 }
+
+.openModal img{
+    max-width: 300px;
+    max-height: 300px;
+    object-fit: fill;
+}

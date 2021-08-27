@@ -5,10 +5,9 @@ class ModalComponent extends Component{
 
     render() {
         const { modalOpen,
-                close,
                 modalTitle,
                 modalContentText,
-            addModalChildren,
+                addModalChildren,
                 modalBottomType,
                 bottomFirstButtonName ,
                 onBottomFirstButtonClick,
@@ -16,7 +15,8 @@ class ModalComponent extends Component{
                 onBottomSecondButtonClick,
                 bottomThirdButtonName,
                 onBottomThirdButtonClick,
-                autoClose
+                autoClose,
+                isAutoClose
                  } = this.props;
 
         return(
@@ -35,9 +35,38 @@ class ModalComponent extends Component{
                         <footer>
                             {
                                 {
-                                    /*alert_oneBtn:<button onClick={onBottomFirstButtonClick}>{bottomFirstButtonName}</button>,*/
-                                    modalBtm_oneBtn : <button onClick={function (){ onBottomFirstButtonClick(); autoClose();}}>{bottomFirstButtonName}</button>,
-                                    modalBtm_twoBtn:<div><button onClick={function (){ onBottomFirstButtonClick(); autoClose();}}>{bottomFirstButtonName}</button><button onClick={function (){ onBottomSecondButtonClick(); autoClose();}}>{bottomSecondButtonName}</button></div>,
+                                    modalBtm_oneBtn :
+                                        <button onClick={function ()
+                                            {
+                                                onBottomFirstButtonClick();
+                                                if(isAutoClose){
+                                                    autoClose();
+                                                }
+                                            }}>
+                                            {bottomFirstButtonName}
+                                        </button>,
+
+                                    modalBtm_twoBtn:
+                                        <div>
+                                            <button onClick={function ()
+                                            {
+                                                onBottomFirstButtonClick();
+                                                if(isAutoClose){
+                                                    autoClose();
+                                                }
+                                            }}>
+                                                {bottomFirstButtonName}
+                                            </button>
+                                            <button onClick={function ()
+                                            {
+                                                onBottomSecondButtonClick();
+                                                if(isAutoClose){
+                                                    autoClose();
+                                                }
+                                            }}>
+                                                {bottomSecondButtonName}
+                                            </button>
+                                        </div>,
                                 }[modalBottomType]
 
                             }

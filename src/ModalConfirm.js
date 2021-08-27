@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
 import { ThemeProvider } from "@material-ui/core/styles";
 import { unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
@@ -20,16 +20,6 @@ const ModalConfirm
            onBottomThirdButtonClick = null,
            autoClose
     }) => {
-
-    const [open, setOpen] = useState(modalOpen);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     return (
         <ThemeProvider theme = {theme}>

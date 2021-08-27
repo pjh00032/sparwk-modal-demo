@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import ModalConfirm from "./ModalConfirm"; // opensource(material-ui)
 import { FileDrop } from 'react-file-drop';
 import ModalComponent from "./ModalComponent"; // opensource 활용하여 별도로 만든거
@@ -19,6 +19,7 @@ export default class App extends Component{
                 modalBottomType : "one Button Modal",
                 bottomFirstButtonName : "OK",
                 onBottomFirstButtonClick : (this.onFirstButtonClick),
+                isAutoClose : true,
                 autoClose : (this.onAutoClose)
             }
         }
@@ -65,7 +66,8 @@ export default class App extends Component{
         bottomSecondButtonName = "",
         onBottomSecondButtonClick = null,
         bottomThirdButtonName = "",
-        onBottomThirdButtonClick = null
+        onBottomThirdButtonClick = null,
+        isAutoClose = true
     ) => {
         let changeModal = this.state.modalProps;
         changeModal.modalType = modalType;
@@ -79,33 +81,50 @@ export default class App extends Component{
         changeModal.onBottomSecondButtonClick = onBottomSecondButtonClick;
         changeModal.bottomThirdButtonName = bottomThirdButtonName;
         changeModal.onBottomThirdButtonClick = onBottomThirdButtonClick;
+        changeModal.isAutoClose = isAutoClose;
 
 
         this.setState({modalProps : changeModal});
 
         this.setState({modalOpen:true});
+
     }
 
     onDropFile = (file, e) => {
-        let reader = new FileReader();
-        const scope = this;
-        let modal = this.state.modalProps;
 
-        reader.onload = function () {
-            scope.onModalOpen(
+        if(file[0].type==="image/jpeg" || file[0].type==="image/png"){
+            let reader = new FileReader();
+            const scope = this;
+
+            reader.onload = function () {
+                scope.onModalOpen(
+                    "",
+                    "drag & drop test",
+                    "1. drop file.\r\n2.modal open.(with file)",
+                    (<div style={{width:"300", height:"300"}}><img src={reader.result} alt="aaa" style={{width:"300", height:"300"}}/></div>),
+                    "modalBtm_oneBtn",
+                    "OK",
+                    function (){
+                        alert("OK");
+                    },
+                );
+            }
+
+            reader.readAsDataURL(file[0]);
+        }else{
+            this.onModalOpen(
                 "",
-                "drag & drop test",
-                "1. drop file.\r\n2.modal open.(with file)",
-                (<img src={reader.result}/>),
+                "warning",
+                "Please drop only image.",
+                null,
                 "modalBtm_oneBtn",
                 "OK",
                 function (){
                     alert("OK");
                 },
             );
-        }
 
-        reader.readAsDataURL(file[0]);
+        }
     }
 
     render() {
@@ -126,7 +145,8 @@ export default class App extends Component{
                                                 onDragLeave={(event) => console.log('onDragLeave', event)}*/
                         onDrop={(files, event) => this.onDropFile( files, event)}
                     >
-                        <h1>Drop some files here!</h1>
+                        <h1>Drop image file here!</h1>
+                        <h2>(only image)</h2>
                     </FileDrop>
                 </div>
 
@@ -153,7 +173,6 @@ export default class App extends Component{
     };
 
     alertBtnTest = () => {
-        const change = this;
         this.onModalOpen(
             "",
             "alert test",
@@ -163,7 +182,6 @@ export default class App extends Component{
             "confirm",
             function (){
                 alert("confirm");
-                //change.setState({modalOpen:false});
             },
         );
 
@@ -180,18 +198,16 @@ export default class App extends Component{
             "modalBtm_twoBtn",
             "OK",
             function (){
-                alert("OK");
-                change.setState({modalOpen:false});
+                change.alertBtnTest();
             },
             "Cancel",
             function (){
                 alert("Cancel");
-                change.setState({modalOpen:false});
             },
+            "",
+            null,
+            false,
         );
-
-
-
     }
 
     buttonOnClick = (changeTest) =>{
@@ -200,8 +216,6 @@ export default class App extends Component{
     }
 
     loginTest = () => {
-
-        const change = this;
         let changeTest = '';
 
         const loginForm = (
@@ -222,12 +236,10 @@ export default class App extends Component{
             "OK",
             function (){
                 alert("OK");
-                change.setState({modalOpen:false});
             },
             "Cancel",
             function (){
                 alert("Cancel");
-                change.setState({modalOpen:false});
             },
         );
 
